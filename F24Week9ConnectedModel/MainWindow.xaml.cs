@@ -97,6 +97,8 @@ namespace F24Week9ConnectedModel
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@fn", txtFirstname.Text);
+                cmd.Parameters.AddWithValue("@ln", txtLastname.Text);
                 conn.Open();
 
                 int result = cmd.ExecuteNonQuery();
