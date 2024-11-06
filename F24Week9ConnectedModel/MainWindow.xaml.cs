@@ -53,7 +53,26 @@ namespace F24Week9ConnectedModel
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                // string concatenation
+                //string query = "select EmployeeID, FirstName, LastName, City, Country from Employees where FirstName='" + txtFirstname.Text + "'";
 
+                // paramterized query
+                string query = "select EmployeeID, FirstName, LastName, City, Country from Employees where FirstName=@fn";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@fn", txtFirstname.Text);
+
+                conn.Open();
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                DataTable tbl = new DataTable();
+                tbl.Load(reader);
+
+                grdEmployees.ItemsSource = tbl.DefaultView;
+            }
         }
     }
 }
