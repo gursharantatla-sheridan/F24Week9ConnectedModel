@@ -74,5 +74,41 @@ namespace F24Week9ConnectedModel
                 grdEmployees.ItemsSource = tbl.DefaultView;
             }
         }
+
+        private void btnCount_Click(object sender, RoutedEventArgs e)
+        {
+            string query = "select count(*) from employees";
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                conn.Open();
+
+                int numRows = (int)cmd.ExecuteScalar();
+
+                MessageBox.Show("Number of rows = " + numRows);
+            }
+        }
+
+        private void btnInsert_Click(object sender, RoutedEventArgs e)
+        {
+            string query = "insert into employees(firstname, lastname) values(@fn, @ln)";
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                conn.Open();
+
+                int result = cmd.ExecuteNonQuery();
+
+                if (result == 1)
+                {
+                    LoadData();
+                    MessageBox.Show("New employee added");
+                }
+                else
+                    MessageBox.Show("New employee not added");
+            }
+        }
     }
 }
